@@ -1,0 +1,20 @@
+{
+  "name": "mongoose-blog-api",
+  "version": "1.0.0",
+  "description": "Blog API using Mongoose",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lkulas/mongoose-blog-API.git"
+  },
+  "author": "Laura Kulas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lkulas/mongoose-blog-API/issues"
+  },
+  "homepage": "https://github.com/lkulas/mongoose-blog-API#readme"
+}
