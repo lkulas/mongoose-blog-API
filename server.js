@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const { PORT, DATABASE_URL } = require('./config');
-const { BlogPosts } = require('./models');
+const { BlogPost } = require('./models');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(morgan('common'));
 
 app.get('/blog-posts', (req, res) => {
-	BlogPosts
+	BlogPost
 		.find()
 		.then(blogs => {
 			res.status(200).json(blogs.map(blog => blog.serialize()));
@@ -28,11 +28,9 @@ app.get('/blog-posts', (req, res) => {
 });
 
 app.get('/blog-posts/:id', (req, res) => {
-	BlogPosts
+	BlogPost
 		.findById(req.params.id)
-		.then(blog => res
-			.status(200)
-			.json(blog.serialize()))
+		.then(blog => res.json(blog.serialize()))
 		.catch(err => {
 			console.error(err);
 			res.status(500).json({ message: "Internal server error" });
@@ -43,20 +41,20 @@ app.post('/blog-posts', (req, res) => {
 	const requiredFields = ['title', 'content', 'author'];
 	for (let i = 0; i < requiredFields.length; i++) {
 		const field = requiredFields[i];
-		if (!(fiend in req.body)) {
+		if (!(field in req.body)) {
 			const message = `Missing \`${field}\` in request body`;
 			console.error(message);
 			return res.status(400).send(message);
 		}
 	}
-	BlogPosts
+	BlogPost
 	.create({
 		title: req.body.title,
 		content: req.body.content,
 		author: req.body.author,
-		publishDate: req.body.publishDate
+		created: req.body.created
 	})
-		.then(blog => res.status(201).json(blogPosts.serialize()))
+		.then(blog => res.status(201).json(blogPost.serialize()))
 		.catch(err => {
 			console.error(err);
 			res.status(500).json({ message: "Internal server error" });
@@ -64,10 +62,10 @@ app.post('/blog-posts', (req, res) => {
 });
 
 app.delete('/blog-posts/:id', (req, res) => {
-	BlogPosts
+	BlogPost
 		.findByIdAndRemove(req.params.id)
 		.then(() => {
-			res.status(204);
+			res.status(204).json({ message: 'Successfully deleted' });
 		})
 		.catch(err => {
 			console.error(err);
@@ -88,7 +86,7 @@ app.put('/blog-posts/:id', (req, res) => {
 			toUpdate[field] = req.body[field];
 		}
 	});
-	BlogPosts
+	BlogPost
 		.findByIdAndUpdate(req.params.id, { $set: toUpdate })
 		.then(blog => res.status(204).end())
 		.catch(err => res.status(500).json({ message: "Internal server error" }));
@@ -100,7 +98,7 @@ function runServer(databaseUrl, port = PORT) {
 	return new Promise((resolve, reject) => {
 		mongoose.connect(databaseUrl,err => {
 			if (err) {
-				return reject(err_);
+				return reject(err);
 			}
 			server = app.listen(port, () => {
 				console.log(`Your app is listening on port ${port}`);
