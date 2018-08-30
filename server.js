@@ -19,13 +19,14 @@ app.get('/blogs', (req, res) => {
 	BlogPost
 		.find()
 		.then(blogs => {
-			res.status(200).json(blogs.map(blog => blog.serialize()));
+			res.json(blogs.map(blog => blog.serialize()));
 		})
 		.catch(err => {
 			console.error(err);
 			res.status(500).json({ message: "Internal server error" });
 		});
 });
+
 
 app.get('/blogs/:id', (req, res) => {
 	BlogPost
