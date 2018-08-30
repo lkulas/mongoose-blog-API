@@ -2,7 +2,7 @@
 "use strict";
 
 const mongoose = require('mongoose');
-const uuid = require('uuid');
+mongoose.Promise = global.Promise;
 
 const blogSchema = mongoose.Schema({
   title: { type: String, required: true },
@@ -10,7 +10,7 @@ const blogSchema = mongoose.Schema({
   author: { 
     firstName: { type: String, required: true },
     lastName: { type: String, required: true }
-  }
+  },
   publishDate: { type: Date, default: Date.now }
 });
 
