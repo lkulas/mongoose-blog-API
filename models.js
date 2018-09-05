@@ -48,20 +48,16 @@ blogPostSchema.methods.serialize = function() {
   };
 };
 
+authorSchema.methods.serialize = function() {
+	return {
+		id: this._id,
+		firstName: this.firstName,
+		lastName: this.lastName,
+		userName: this.userName
+	};
+};
+
 const Author = mongoose.model('Author', authorSchema);
 const BlogPost = mongoose.model('BlogPost', blogPostSchema);
 
-BlogPost
-	.findOne({
-		title: 'another title'
-	})
-	.populate('author')
-	.then(function (err, post) {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log(post.author.firstName, post.author.lastName);
-		}
-	});
-
-module.exports = { BlogPost };
+module.exports = { Author, BlogPost };
